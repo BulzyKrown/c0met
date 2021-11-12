@@ -26,7 +26,6 @@ To get the token go to [Panel](https://com3t.xyz/panel)</b>
 * [Amiajoke](#amiajoke)
 * [Beautiful](#beautiful)
 * [Beautiful2](#beautiful2)
-* [Amiajoke](#amiajoke)
 * [Blur](#blur)
 * [Border](#border)
 * [Concierge](#concierge)
@@ -44,6 +43,7 @@ To get the token go to [Panel](https://com3t.xyz/panel)</b>
 * [Rip](#rip)
 * [Sepia](#sepia)
 * [Stonk](#stonk)
+* [Spin](#spin)
 * [Tint](#tint)
 * [Triggered](#triggered)
 * [Color](#color)
@@ -332,6 +332,18 @@ Comet.Sepia(avatar)
  */
 
 Comet.Stonk(avatar)
+
+```
+
+# Spin
+
+```js
+
+/**
+ * @return {Promise<Buffer>}
+ */
+
+Comet.Spin(avatar)
 
 ```
 
