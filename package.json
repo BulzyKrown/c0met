@@ -7,7 +7,11 @@
   "scripts": {
     "test": "node ./src/index.js"
   },
-  "keywords": [],
+  "keywords": ["comet", "com3t", "c0met"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BulzyKrown/c0met.git"
+  },
   "author": "Esponjosin",
   "license": "ISC",
   "dependencies": {
