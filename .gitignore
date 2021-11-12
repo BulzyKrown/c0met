@@ -9,7 +9,8 @@ yarn-debug.log*
 yarn-error.log*
 .vscode/*
 *.sqlite
-package-lock.json
+# Lo quite porque el workflow usa npm ci y requiere de este archivo
+# package-lock.json
 config.json
 # Runtime data
 pids
