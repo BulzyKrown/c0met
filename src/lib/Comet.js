@@ -497,7 +497,7 @@ class Comet {
     
             if(isNaN(line)) return reject(new Error(`The value of line has to be a number`));
             if(line < 1) return reject(new Error(`The value of line has to be a number greater than 0`));
-            if(isLineBreak >= 20) return reject(new Error(`The value of line has to be a number less than 20`));
+            if(line >= 20) return reject(new Error(`The value of line has to be a number less than 20`));
 
             do {
                 await wait(250);
