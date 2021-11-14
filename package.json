@@ -12,7 +12,11 @@
     "type": "git",
     "url": "https://github.com/BulzyKrown/c0met.git"
   },
-  "private": false,
+  {
+  "publishConfig": {
+    "access": "public"
+  }
+},
   "author": "Esponjosin",
   "license": "MIT",
   "dependencies": {
