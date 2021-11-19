@@ -1,5 +1,5 @@
 {
-  "name": "c0met",
+  "name": "@bulzykrown/c0met",
   "version": "1.1.6",
   "description": "Little npm about c0met.xyz api",
   "main": "./src/index.js",
