@@ -10,8 +10,7 @@
   "keywords": ["comet", "com3t", "c0met"],
   "repository": "git://github.com/BulzyKrown/c0met.git",
   "publishConfig": {
-    "access": "public",
-    "registry":"https://registry.npmjs.org/"
+    "access": "public"
   },
   "author": "Esponjosin",
   "license": "MIT",
