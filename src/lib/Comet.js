@@ -623,6 +623,50 @@ class Comet {
     }
 
     /**
+     * Darling Function
+     * @description Returns an image which he loves "Zero Two".
+     * @param {string} avatar Image loved by ZeroTwo.
+     * @reject Token error
+     * @returns {Promise<Buffer>}
+     */
+
+     Darling(avatar) {
+
+        let self = this;
+
+        return new Promise(async (resolve, reject) => {
+            
+            if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
+
+            do {
+                await wait(250);
+            } while(!self.options.token && !self.dontHandle);
+
+            if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
+        
+            let res = await this._request('imgedit/darling', { 
+                avatar: avatar 
+            }, {
+                token: self.options.token
+            });
+
+            if(!res) return reject(new Error('The request could not be made'));
+
+            if(res.message && res.message == 'You need a token to use this endpoint') {
+                await self.forceCheck();
+                resolve(await self.Darling(...Object.values(arguments)));
+            }
+
+            if(res.message) return reject(new Error(res.message));
+
+            return resolve(res)
+
+        })
+
+    }
+
+    
+    /**
      * Ed Function
      * @description Based on two images, deliver one with ED type
      * @param {string} avatar1 The first avatar
@@ -1361,7 +1405,7 @@ class Comet {
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
                 await self.forceCheck();
-                resolve(await self.Triggered(...Object.values(arguments)));
+                resolve(await self.Delet(...Object.values(arguments)));
             }
 
             if(res.message) return reject(new Error(res.message));

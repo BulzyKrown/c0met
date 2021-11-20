@@ -30,6 +30,7 @@ To get the token go to [Panel](https://com3t.xyz/panel)</b>
 * [Border](#border)
 * [Concierge](#concierge)
 * [Convolutional](#convolutional)
+* [Darling](#darling)
 * [Ed](#ed)
 * [Flip](#flip)
 * [Glitch](#glitch)
@@ -176,6 +177,18 @@ Comet.Concierge(avatar, avatar1)
 Comet.Convolutional(avatar, ConFilter)
 
 //Convolutional filter help: https://docs.gimp.org/2.8/en/plug-in-convmatrix.html
+
+```
+
+# Darling
+
+```js
+
+/**
+ * @return {Promise<Buffer>}
+ */
+
+Comet.Darling(avatar)
 
 ```
 
