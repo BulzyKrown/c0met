@@ -1337,7 +1337,7 @@ class Comet {
      * @returns {Promise<Buffer>}
      */
 
-    Triggered(avatar) {
+    Delet(avatar) {
 
         let self = this;
 

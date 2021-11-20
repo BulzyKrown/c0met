@@ -46,6 +46,7 @@ To get the token go to [Panel](https://com3t.xyz/panel)</b>
 * [Spin](#spin)
 * [Tint](#tint)
 * [Triggered](#triggered)
+* [Delet](#delet)
 * [Color](#color)
 * [Lyrics](#lyrics)
 * [McServer](#mcserver)
@@ -368,6 +369,18 @@ Comet.Tint(avatar, color)
  */
 
 Comet.Triggered(avatar)
+
+```
+
+# Delet
+
+```js
+
+/**
+ * @return {Promise<Buffer>}
+ */
+
+Comet.Delet(avatar)
 
 ```
 
