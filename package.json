@@ -8,13 +8,10 @@
     "test": "node ./src/index.js"
   },
   "keywords": ["comet", "com3t", "c0met"],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/BulzyKrown/c0met.git"
-  },
+  "repository": "git://github.com/BulzyKrown/c0met.git",
   "publishConfig": {
     "access": "public",
-    "registry":"https://npm.pkg.github.com"
+    "registry":"https://npm.pkg.github.com/"
   },
   "author": "Esponjosin",
   "license": "MIT",
