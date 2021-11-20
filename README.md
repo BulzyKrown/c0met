@@ -1,4 +1,4 @@
-# Comet API <img src="https://com3t.xyz/assets/img/icon.png" alt="Comet" width="25px" />
+# Comet API <img src="https://c0met.xyz/assets/img/icon.png" alt="Comet" width="25px" />
 
 Comet is an API focused on facilitating the work of developers by providing them with various image modifiers and other tools so that they can provide a better service
 
