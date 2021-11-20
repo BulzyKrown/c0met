@@ -11,7 +11,7 @@
   "repository": "git://github.com/BulzyKrown/c0met.git",
   "publishConfig": {
     "access": "public",
-    "registry":"https://npm.pkg.github.com/"
+    "registry":"https://registry.npmjs.org/"
   },
   "author": "Esponjosin",
   "license": "MIT",
