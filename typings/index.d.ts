@@ -131,7 +131,7 @@ declare class Comet {
     public Border(avatar: string, border: string, line?: number): Promise<Buffer>;
     public Concierge(avatar1: string, avatar2: string): Promise<Buffer>;
     public Convolutional(avatar: string, filter: string): Promise<Buffer>;
-    public Darling(avatar: string, filter: string): Promise<Buffer>;
+    public Darling(avatar: string): Promise<Buffer>;
     public Ed(avatar1: string, avatar2: string): Promise<Buffer>;
     public Flip(avatar: string): Promise<Buffer>;
     public Glitch(avatar: string): Promise<Buffer>;
