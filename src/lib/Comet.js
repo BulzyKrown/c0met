@@ -1267,7 +1267,7 @@ class Comet {
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
                 await self.forceCheck();
-                resolve(await self.Stonk(...Object.values(arguments)));
+                resolve(await self.Spin(...Object.values(arguments)));
             }
 
             if(res.message) return reject(new Error(res.message));
