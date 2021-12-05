@@ -492,7 +492,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-            if(!border || typeof avatar !== 'string') return reject(new Error(`You need to put an border`));
+            if(!border || typeof border !== 'string') return reject(new Error(`You need to put an border`));
             if(!line) line = 5;
     
             if(isNaN(line)) return reject(new Error(`The value of line has to be a number`));
