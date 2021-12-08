@@ -1730,7 +1730,7 @@ class Comet {
 
     /**
      * YT Function
-     * @description Get the image of a page
+     * @description Get information about a video
      * @param {string} id The id of a youtube video
      * @reject Token error
      * @returns {Promise<VideoInfo>}
