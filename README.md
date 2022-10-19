@@ -29,6 +29,7 @@ To get the token go to [Panel](https://com3t.xyz/panel)</b>
 * [Blur](#blur)
 * [Border](#border)
 * [Concierge](#concierge)
+* [Colorify](#colorify)
 * [Convolutional](#convolutional)
 * [Darling](#darling)
 * [Ed](#ed)
@@ -53,7 +54,6 @@ To get the token go to [Panel](https://com3t.xyz/panel)</b>
 * [McServer](#mcserver)
 * [PreColor](#precolor)
 * [Screenshot](#screenshot)
-* [YT](#yt)
 * [AI](#ai)
 * [Base64](#base64)
 * [Binary](#binary)
@@ -163,6 +163,27 @@ Comet.Border(avatar, border, line)
  */
 
 Comet.Concierge(avatar, avatar1)
+
+```
+
+# Colorify
+
+```js
+
+/**
+ * @return {Promise<Buffer>}
+ */
+
+Comet.Colorify(avatar, {
+	gradient: boolean,
+	sqrt: boolean,
+	rainbow: boolean,
+	threshold1: number,
+	threshold2: number,
+	dark: string,
+	blurple: string
+	white: string
+})
 
 ```
 
