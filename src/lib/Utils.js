@@ -12,7 +12,7 @@ module.exports = {
         let final = n;
 
         for(var k of Object.keys(d)) {
-            if(!n[k]) final[k] = d[k]
+            if(!n[k] && typeof n[k] != 'boolean') final[k] = d[k]
         }
 
         return final

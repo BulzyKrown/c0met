@@ -1,5 +1,3 @@
-const { isLineBreak } = require('typescript');
-
 const fetch     = require('node-fetch'),
 	path 		= require('path'),
     wait        = ms => new Promise((resolve, reject) => setTimeout(resolve, ms)),
@@ -23,156 +21,11 @@ class Comet {
         let self = this;
 
         self.url = "https://c0met.xyz";
-		this.options = {};
-
-        (async function() {
-
-            const res = await self._request(`temp`, {}, {
-                token: token
-            }).catch(e => false);
-
-            if(!res) {
-                
-                /**
-                 * Property to unallow send requests
-                 * @type {Boolean}
-                 * @private
-                 */
-    
-                 Object.defineProperty(self, 'dontHandle', { value: true });
-
-                 throw new Error('The main request could not be made');
-
-            } else {
-
-                if(res.message) {
-
-                    /**
-                     * Property to unallow send requests
-                     * @type {Boolean}
-                     * @private
-                     */
-        
-                    Object.defineProperty(self, 'dontHandle', { value: true });
-
-                    throw new Error(res.message);
-                }
-
-                /**
-                 * @private
-                 */
-
-                Object.defineProperty(self.options, 'token', { value: res.token, writable: true });
-
-                /**
-                 * @private
-                 */
-                
-                Object.defineProperty(self.options, 'originalToken', { value: token });
-
-                self.startAutoCheck();
-
-                return true;
-
-            }
-
-        })();
+		this.options = {
+            token: token
+        };
 
     }
-
-    /**
-     * A function to periodical token check for wrapper
-     * @private
-     * @returns {void}
-     */
-
-    async startAutoCheck() {
-
-		let self = this;
-
-        try {
-            
-            const res = await self._request(`temp`, {}, {
-                token: self.options.originalToken
-            }).catch(e => false);
-
-            if(res.message) {
-
-                /**
-                * @private
-                */
-        
-                Object.defineProperty(self, 'dontHandle', { value: true });
-
-                throw new Error(res.message);
-            }
-
-            if(res.token !== this.options.token) {
-                
-                /**
-                * @private
-                */
-
-                Object.defineProperty(self.options, 'token', { value: res.token, writable: true });
-
-            }
-
-        } catch(e) {
-
-        }
-
-        await wait(60 * 1000)
-
-        this.startAutoCheck()
-
-    }
-
-    /**
-     * A method for Wrapper to force temp token Update
-     * @private
-     * @returns {any}
-     */
-
-    async forceCheck() {
-
-		let self = this;
-    
-        try {
-                
-            const res = await self._request('/temp', {}, {
-                token: self.options.originalToken
-            });
-    
-            if(!res || typeof res != 'object' || res.message) {
-    
-                /**
-                * @private
-                */
-            
-                Object.defineProperty(self, 'dontHandle', { value: true });
-
-                throw new Error(res.message);
-            
-            }
-    
-            if(res.token !== this.options.token) {
-                    
-                /**
-                * @private
-                */
-    
-                Object.defineProperty(self.options, 'token', { value: res.token, writable: true });
-    
-            }
-    
-        } catch(e) {
-    
-        }
-
-        return;
-    
-    }
-
     /**
      * Private request function for Wrapper
      * @private
@@ -226,9 +79,7 @@ class Comet {
 
         return new Promise(async (resolve, reject) => {
             
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
+            
 
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
@@ -239,7 +90,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
             
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Token(...Object.values(arguments)));
             }
 
@@ -267,10 +118,6 @@ class Comet {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
 
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/beautiful', { 
@@ -282,7 +129,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Beautiful(...Object.values(arguments)));
             }
 
@@ -310,10 +157,6 @@ class Comet {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
 
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/amiajoke', { 
@@ -325,7 +168,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Beautiful(...Object.values(arguments)));
             }
 
@@ -351,12 +194,8 @@ class Comet {
 
         return new Promise(async (resolve, reject) => {
             
-            if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`));
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/beautiful2', { 
@@ -368,7 +207,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Beautiful(...Object.values(arguments)));
             }
 
@@ -397,10 +236,6 @@ class Comet {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
 
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/challenger', { 
@@ -412,7 +247,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Beautiful(...Object.values(arguments)));
             }
 
@@ -447,10 +282,6 @@ class Comet {
             if(count < 1) return reject(new Error(`The value of count has to be a number greater than 0`));
             if(count >= 210) return reject(new Error(`The value of count has to be a number less than 209`));
 
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/blur', { 
@@ -463,7 +294,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Blur(...Object.values(arguments)));
             }
 
@@ -499,10 +330,6 @@ class Comet {
             if(line < 1) return reject(new Error(`The value of line has to be a number greater than 0`));
             if(line >= 20) return reject(new Error(`The value of line has to be a number less than 20`));
 
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/border', { 
@@ -516,7 +343,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Blur(...Object.values(arguments)));
             }
 
@@ -545,10 +372,6 @@ class Comet {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar1`));
             if(!avatar1 || typeof avatar1 !== 'string') return reject(new Error(`You need to put an avatar2`)); 
-        
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
 
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
@@ -562,7 +385,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Concierge(...Object.values(arguments)));
             }
 
@@ -594,10 +417,6 @@ class Comet {
             if(!filter.includes(',')) return reject(new Error(`The filter must have 9 numerical values separated by a comma`));
             if(!filter.split(',').length > 8) return reject(new Error(`The filter must have 9 numerical values`));
         
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/convolutional', { 
@@ -610,7 +429,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Convolutional(...Object.values(arguments)));
             }
 
@@ -637,11 +456,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/darling', { 
@@ -653,7 +468,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Darling(...Object.values(arguments)));
             }
 
@@ -683,11 +498,7 @@ class Comet {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar1`));
             if(!avatar1 || typeof avatar1 !== 'string') return reject(new Error(`You need to put an avatar2`)); 
-        
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/ed', { 
@@ -700,7 +511,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Ed(...Object.values(arguments)));
             }
 
@@ -727,11 +538,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/flip', { 
@@ -743,7 +550,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Flip(...Object.values(arguments)));
             }
 
@@ -770,11 +577,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/glitch', { 
@@ -786,7 +589,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Glitch(...Object.values(arguments)));
             }
 
@@ -813,11 +616,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/grayscale', { 
@@ -829,7 +628,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Grayscale(...Object.values(arguments)));
             }
 
@@ -856,11 +655,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/invert_grayscale', { 
@@ -872,7 +667,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Invert_Grayscale(...Object.values(arguments)));
             }
 
@@ -899,11 +694,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/nstonk', { 
@@ -915,7 +706,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Not_Stonk(...Object.values(arguments)));
             }
 
@@ -942,11 +733,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/invert', { 
@@ -958,7 +745,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Invert(...Object.values(arguments)));
             }
 
@@ -985,11 +772,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/pencil_shading', { 
@@ -1001,7 +784,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Pencil_Shading(...Object.values(arguments)));
             }
 
@@ -1028,11 +811,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/peridot', { 
@@ -1044,7 +823,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Peridot(...Object.values(arguments)));
             }
 
@@ -1071,11 +850,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/pixel', { 
@@ -1087,8 +862,101 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Pixel(...Object.values(arguments)));
+            }
+
+            if(res.message) return reject(new Error(res.message));
+
+            return resolve(res)
+
+        })
+
+    }
+
+    /**
+     * Colorify Function
+     * @description Generates an image with a Colorify effect.
+     * @param {string} avatar The image to be modified
+     * @param {ColorifyOptions} options
+     * @reject Token error
+     * @returns {Promise<Buffer>}
+     */
+
+    /**
+     * @typedef {Object} ColorifyOptions
+     * @property {number} [threshold1=33] 
+     * @property {number} [threshold2=66]
+     * @property {boolean} [gradient=false]
+     * @property {boolean} [sqrt=false]
+     * @property {boolean} [rainbow=false]
+     * @property {string} [dark="#454fbf"] Color 1
+     * @property {string} [blurple="#5865f2"] Color 2
+     * @property {string} [white="#ffffff"] White
+     */
+
+    Colorify(avatar, options = { threshold1:33, threshold2:66, gradient:false, sqrt:false, rainbow:false, dark:"#454fbf", blurple:"#5865f2", white:"#ffffff" }) {
+
+        options = Utils.fromDefault({ threshold1:33, threshold2:66, gradient:false, sqrt:false, rainbow:false, dark:"#454fbf", blurple:"#5865f2", white:"#ffffff" }, options)
+
+        let { threshold1, threshold2, gradient, sqrt, rainbow, dark, blurple, white } = options;
+
+        let self = this;
+
+        return new Promise(async (resolve, reject) => {
+            
+            if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
+            if(!threshold1 || isNaN(threshold1)) return reject(new Error(`You need to put an valid number in threshold1`)); 
+            if(!threshold2 || isNaN(threshold2)) return reject(new Error(`You need to put an valid number in threshold2`)); 
+            if(!gradient.toString || typeof gradient !== 'boolean') return reject(new Error(`You need to put an valid boolean in gradient`)); 
+            if(!sqrt.toString || typeof sqrt !== 'boolean') return reject(new Error(`You need to put an valid boolean in sqrt`)); 
+            if(!rainbow.toString || typeof rainbow !== 'boolean') return reject(new Error(`You need to put an valid boolean in rainbow`)); 
+            
+            if(!dark || !['string', 'number'].includes(typeof dark)) return reject(new Error(`You need to put an valid dark color`));
+
+            if(typeof dark == 'number') dark = Number(dark).toString('16');
+            dark = dark.replace('#', '');
+            if(dark.startsWith('0x') && dark.length > 7) dark = dark.slice(2);
+
+            if(!dark.length > 2 && !dark.length < 7) return reject(new Error(`You need to put an valid dark color`));
+            
+            if(!blurple || !['string', 'number'].includes(typeof blurple)) return reject(new Error(`You need to put an valid blurple color`));
+
+            if(typeof blurple == 'number') blurple = Number(blurple).toString('16');
+            blurple = blurple.replace('#', '');
+            if(blurple.startsWith('0x') && blurple.length > 7) blurple = blurple.slice(2);
+
+            if(!blurple.length > 2 && !blurple.length < 7) return reject(new Error(`You need to put an valid blurple color`));
+            
+            if(!white || !['string', 'number'].includes(typeof white)) return reject(new Error(`You need to put an valid white color`));
+
+            if(typeof white == 'number') white = Number(white).toString('16');
+            white = white.replace('#', '');
+            if(white.startsWith('0x') && white.length > 7) white = white.slice(2);
+
+            if(!white.length > 2 && !white.length < 7) return reject(new Error(`You need to put an valid white color`));
+
+            if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
+        
+            let res = await this._request('imgedit/colorify', { 
+                avatar: avatar,
+                threshold1: threshold1,
+                threshold2: threshold2,
+                gradient: gradient,
+                sqrt: sqrt,
+                rainbow: rainbow,
+                dark: '#' + dark,
+                blurple: '#' + blurple,
+                white: '#' + white
+            }, {
+                token: self.options.token
+            });
+
+            if(!res) return reject(new Error('The request could not be made'));
+
+            if(res.message && res.message == 'You need a token to use this endpoint') {
+               
+                resolve(await self.Colorify(...Object.values(arguments)));
             }
 
             if(res.message) return reject(new Error(res.message));
@@ -1116,11 +984,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let q = { 
@@ -1137,7 +1001,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Rip(...Object.values(arguments)));
             }
 
@@ -1164,11 +1028,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/sepia', { 
@@ -1180,7 +1040,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Sepia(...Object.values(arguments)));
             }
 
@@ -1207,11 +1067,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+        
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/stonk', { 
@@ -1223,7 +1079,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Stonk(...Object.values(arguments)));
             }
 
@@ -1250,11 +1106,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/spin', { 
@@ -1266,7 +1118,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Stonk(...Object.values(arguments)));
             }
 
@@ -1301,11 +1153,7 @@ class Comet {
             if(color.startsWith('0x') && color.length > 7) color = color.slice(2);
 
             if(!color.length > 2 && !color.length < 7) return reject(new Error(`You need to put an valid color`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/tint', { 
@@ -1318,7 +1166,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Tint(...Object.values(arguments)));
             }
 
@@ -1345,11 +1193,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/triggered', { 
@@ -1361,7 +1205,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Triggered(...Object.values(arguments)));
             }
 
@@ -1388,11 +1232,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('imgedit/delet', { 
@@ -1404,7 +1244,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Delet(...Object.values(arguments)));
             }
 
@@ -1452,11 +1292,7 @@ class Comet {
             if(color.startsWith('0x') && color.length > 7) color = color.slice(2);
 
             if(!color.length > 2 && !color.length < 7) return reject(new Error(`You need to put an valid color`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('information/color', { 
@@ -1468,7 +1304,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Color(...Object.values(arguments)));
             }
 
@@ -1503,11 +1339,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!song || typeof song != 'string') return reject(new Error(`You need to put an song`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('information/lyrics', { 
@@ -1519,7 +1351,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Color(...Object.values(arguments)));
             }
 
@@ -1585,11 +1417,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!ip || typeof ip != 'string') return reject(new Error(`You need to put an ip`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let q = { 
@@ -1605,7 +1433,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Color(...Object.values(arguments)));
             }
 
@@ -1637,11 +1465,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!avatar || typeof avatar !== 'string') return reject(new Error(`You need to put an avatar`)); 
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('information/precolor', { 
@@ -1653,7 +1477,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.PreColor(...Object.values(arguments)));
             }
 
@@ -1680,11 +1504,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!url || typeof url != 'string') return reject(new Error(`You need to put an url`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('information/screenshot', { 
@@ -1696,71 +1516,8 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Screenshot(...Object.values(arguments)));
-            }
-
-            if(res.message) return reject(new Error(res.message));
-
-            return resolve(res)
-
-        })
-
-    }
-
-    /**
-     * @typedef {Object} Duration
-     * @property {number} days
-     * @property {number} hours
-     * @property {number} minutes
-     * @property {number} seconds
-     * @property {number} milliseconds
-     * @property {number} microseconds
-     * @property {number} nanoseconds
-     */
-
-    /**
-     * @typedef {Object} VideoInfo
-     * @property {string} title
-     * @property {string} description
-     * @property {string|number} views
-     * @property {Duration} duration
-     * @property {string} author
-     */
-
-    /**
-     * YT Function
-     * @description Get the image of a page
-     * @param {string} id The id of a youtube video
-     * @reject Token error
-     * @returns {Promise<VideoInfo>}
-     */
-
-    YT(id) {
-
-        let self = this;
-
-        return new Promise(async (resolve, reject) => {
-            
-            if(!id || typeof id != 'string') return reject(new Error(`You need to put an video id`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
-            if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
-        
-            let res = await this._request('information/yt', { 
-                id: id
-            }, {
-                token: self.options.token
-            });
-
-            if(!res) return reject(new Error('The request could not be made'));
-
-            if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
-                resolve(await self.YT(...Object.values(arguments)));
             }
 
             if(res.message) return reject(new Error(res.message));
@@ -1791,11 +1548,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!message || typeof message != 'string') return reject(new Error(`You need to put an message`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('misc/ai', { 
@@ -1807,7 +1560,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.AI(...Object.values(arguments)));
             }
 
@@ -1841,11 +1594,7 @@ class Comet {
             
             if(!message || typeof message != 'string') return reject(new Error(`You need to put an message`));
             if(typeof decode !== 'boolean') return reject(new Error(`You need to put a boolean`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('misc/base64', { 
@@ -1858,7 +1607,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Base64(...Object.values(arguments)));
             }
 
@@ -1893,10 +1642,6 @@ class Comet {
             if(!message || typeof message != 'string') return reject(new Error(`You need to put an message`));
             if(typeof decode !== 'boolean') return reject(new Error(`You need to put a boolean`));
             
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('misc/binary', { 
@@ -1909,7 +1654,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Binary(...Object.values(arguments)));
             }
 
@@ -1945,11 +1690,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!message || typeof message != 'string') return reject(new Error(`You need to put an message`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('moderation/sw', { 
@@ -1961,7 +1702,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Zalgo(...Object.values(arguments)));
             }
 
@@ -1995,11 +1736,7 @@ class Comet {
         return new Promise(async (resolve, reject) => {
             
             if(!message || typeof message != 'string') return reject(new Error(`You need to put an message`));
-
-            do {
-                await wait(250);
-            } while(!self.options.token && !self.dontHandle);
-
+            
             if(!self.options || !self.options.token) return reject(new Error(`You need to enter your token, if you don't have it you can get it at https://c0met.xyz`)); 
         
             let res = await this._request('moderation/zalgo', { 
@@ -2011,7 +1748,7 @@ class Comet {
             if(!res) return reject(new Error('The request could not be made'));
 
             if(res.message && res.message == 'You need a token to use this endpoint') {
-                await self.forceCheck();
+               
                 resolve(await self.Zalgo(...Object.values(arguments)));
             }
 

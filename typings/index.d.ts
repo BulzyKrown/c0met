@@ -148,6 +148,7 @@ declare class Comet {
     public Stonk(avatar: string): Promise<Buffer>;
     public Spin(avatar: string): Promise<Buffer>;
     public Tint(avatar: string, color: string|number): Promise<Buffer>;
+    public Colorify(avatar: string, threshold1: number, threshold2: number, gradient: boolean, sqrt: boolean, rainbow: boolean, dark: string, blurple: string, white: string): Promise<Buffer>;
     public Triggered(avatar: string): Promise<Buffer>;
     public Delet(avatar: string): Promise<Buffer>;
     public Color(color: string|number): Promise<ColorInfo>;
