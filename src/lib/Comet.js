@@ -20,7 +20,7 @@ class Comet {
 
         let self = this;
 
-        self.url = "https://c0met.xyz";
+        self.url = "https://com3t.xyz";
 		this.options = {
             token: token
         };
